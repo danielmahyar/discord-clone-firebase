@@ -1,5 +1,6 @@
 import { Route, Switch } from "react-router";
 import ServerList from "./components/serverlist/ServerList";
+import Top from "./components/Top";
 import FriendsPage from "./pages/FriendsPage";
 
 const routes = [
@@ -12,11 +13,9 @@ const routes = [
 
 const App = () => {
   return (
-    <div className="h-screen flex flex-col"> 
-      {/*Top of Screen*/}
-      <div className="w-full h-8 bg-gray-900 flex items-center">
-        <h2 className="text-white px-2 font-bold">Vocast Hub</h2>
-      </div>
+    <div className="h-screen flex flex-col overflow-hidden"> 
+
+      <Top />
 
       <main className="h-full flex bg-gray-900 overflow-y-hidden">
         {/*Sidebar to the left*/}
