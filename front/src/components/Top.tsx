@@ -1,7 +1,7 @@
 const Top = () => {
 	return (
-		<div className="w-full h-8 bg-gray-900 flex items-center">
-			<h2 className="text-white px-2 font-bold">Vocast Hub</h2>
+		<div className="w-full h-8 bg-discord-dark flex items-center">
+			<h2 className="text-discord-text-secondary px-2 font-bold">VOCAST CEO WITHOUT HIS CO CEO :(</h2>
 		</div>
 	)
 }
