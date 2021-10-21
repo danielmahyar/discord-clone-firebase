@@ -1,29 +1,25 @@
-import template from '../../../assets/template.jpg'
 import { MdClear } from 'react-icons/md'
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
+import { FriendInformation } from '../../../pages/IndexPage'
 
 type ParamsType = {
 	id: string
 }
 
-type PropsType = {
-	friendID: string
-}
-
-const FriendField = (props: PropsType) => {
+const FriendField = (props: FriendInformation) => {
 	const [showClear, setShowClear] = useState(false)
 	const [active, setActive] = useState(false);
 	const history = useHistory()
 	const params: ParamsType = useParams()
 
 	useEffect(() => {
-		if(props.friendID === params.id) return setActive(true)
+		if(props.uid === params.id) return setActive(true)
 		else return setActive(false)
-	}, [history, params])
+	}, [history, params, props.uid])
 
 	const handleMessageClick = () => {
-		history.push(`/friends/${props.friendID}`)
+		history.push(`/friends/${props.uid}`)
 	}
 
 	const handleClearShow = () => {
@@ -46,8 +42,8 @@ const FriendField = (props: PropsType) => {
 			className={`px-1.5 p-1.5 w-full flex items-center justify-between cursor-pointer rounded ${(active) && "bg-discord-active" } hover:bg-discord-hover`}
 		>
 			<div className="flex items-center">
-				<img src={template} width="30px" className="mr-3 rounded-full" alt="" />
-				<h2 className="text-discord-text-primary font-bold text-sm truncate w-36">Anden Etnisk Programmør</h2>
+				<img src={props.img_url} width="30px" className="mr-3 rounded-full" alt="" />
+				<h2 className="text-discord-text-primary font-bold text-sm truncate w-36">{props.name}</h2>
 			</div>
 			
 			{showClear && (

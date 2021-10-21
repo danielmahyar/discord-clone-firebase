@@ -2,15 +2,14 @@ import React from 'react'
 import img from '../../../assets/template.jpg'
 import { BiMessage, BiDotsVerticalRounded } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
-type PropsType = {
-	friendID: string
-}
+import { FriendInformation } from '../../../pages/IndexPage'
 
-const FriendOnlineListField = (props: PropsType) => {
-	const { friendID } = props
+
+const FriendOnlineListField = (props: FriendInformation) => {
+	const { uid } = props
 
 	return (
-		<Link to={`/friends/${friendID}`} className="w-full px-3 py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
+		<Link to={`/friends/${uid}`} className="w-full px-3 py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
 			<div className="flex items-center">
 				<div className="flex items-center mr-4">
 					<img src={img} className="rounded-full select-none pointer-events-none" alt="" width="50px" />

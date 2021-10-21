@@ -1,76 +1,46 @@
-import { Redirect, Route, Switch } from "react-router";
-import ServerList from "./components/serverlist/ServerList";
-import Top from "./components/Top";
-import FriendsPage from "./pages/Friends/FriendsPage";
-import FriendsDMPage from "./pages/Friends/FriendsDMPage";
+import { Route, Switch } from "react-router";
 import IndexPage from "./pages/IndexPage";
-import ServerPage from "./pages/Servers/ServerPage";
+import FriendsDMPage from "./pages/Friends/FriendsDMPage";
+import LoginPage from "./pages/LoginPage";
+import ServerStartPage from "./pages/Servers/ServerStartPage";
+import FriendsStartPage from "./pages/Friends/FriendsStartPage";
+import { useState } from "react";
 
-const routes = [
-  {
-    isExact: true,
-    path: "/",
-    component: IndexPage,
-    routes: [
-      {
-        path: "/friends",
-        component: FriendsPage,
-        routes: [
-          {
-            path: "/friends/:id",
-            component: FriendsDMPage
-          }
-        ]
-      },
-      {
-        path: "/server",
-        component: ServerPage,
-        routes: [
-          {
-            path: "/server/:id",
-            component: FriendsDMPage
-          }
-        ]
-      }
-    ],
-  },
-  {
-
-  }
-
+//Routes for main application excluding login/signup
+export const routes = [
+    {
+      exact: true,
+      path: "/friends",
+      component: FriendsStartPage,
+    },
+    {
+      path: "/friends/:id",
+      component: FriendsDMPage
+    },
+    {
+      path: "/server/:id",
+      component: ServerStartPage
+    },
 ]
 
 const App = () => {
+  const [test, setTest] = useState(false)
   return (
-    <div className="h-screen flex flex-col overflow-hidden"> 
+    <div className="h-screen flex flex-col overflow-hidden select-none relative z-0"> 
 
-      <Top />
-
-      <main className="h-full flex bg-discord-dark overflow-y-hidden">
-
-        {/*Pages here: */}
-        <Switch>
-          {routes.map((route, index) =>(
-            <RouteWithSubRoutes key={index} {...route} />
-          ))}
-        </Switch>
-
-
-      </main>
+      <Switch>
+        {test ? (
+          <Route path="/">
+            <IndexPage routes={routes}/>
+          </Route>
+        ) : (
+          <Route path="/">
+            <LoginPage setTest={setTest}/>
+          </Route>
+        )}
+      </Switch>
     </div>
   )
-}
-
-const RouteWithSubRoutes = (route: any) => {
-  return (
-    <Route
-      path={route.path}
-      render={props => (
-        // pass the sub-routes down to keep nesting
-        <route.component {...props} routes={route.routes} />
-      )}
-    />
-  );
 }
 
 export default App;

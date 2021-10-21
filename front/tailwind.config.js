@@ -1,5 +1,4 @@
 module.exports = {
-  mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -37,14 +36,36 @@ module.exports = {
           DEFAULT: '#8E9297',
         },
 
+        'discord-text-highlight': {
+          DEFAULT: '#B9BBBE',
+        },
+
+        'discord-text-para': {
+          DEFAULT: '#D7D6D9',
+        },
+
         'discord-text-secondary': {
           DEFAULT: '#72767D',
         },
 
         'discord-text-input': {
           DEFAULT: '#40444B',
+        },
+
+        'discord-blue': {
+          DEFAULT: '#06A2E0',
+        },
+
+        'discord-purple': {
+          DEFAULT: '#5865F2',
         }
       },
+      spacing: {
+        '1/1': '100%'
+      },
+      width: {
+        '126': '36rem'
+      }
     },
   },
   variants: {
@@ -53,6 +74,7 @@ module.exports = {
       borderRadius: ['group-hover'],
       height: ['group-hover'],
       top: ['group-hover'],
+      scale: ['group-hover'],
     },
   },
   plugins: [
