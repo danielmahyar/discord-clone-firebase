@@ -4,7 +4,8 @@ import FriendsDMPage from "./pages/Friends/FriendsDMPage";
 import LoginPage from "./pages/LoginPage";
 import ServerStartPage from "./pages/Servers/ServerStartPage";
 import FriendsStartPage from "./pages/Friends/FriendsStartPage";
-import { useState } from "react";
+import {  useState } from "react";
+import { gql } from "@apollo/client";
 
 //Routes for main application excluding login/signup
 export const routes = [
@@ -14,17 +15,18 @@ export const routes = [
       component: FriendsStartPage,
     },
     {
-      path: "/friends/:id",
+      path: "/friends/:uid",
       component: FriendsDMPage
     },
     {
-      path: "/server/:id",
+      path: "/server/:uid",
       component: ServerStartPage
     },
 ]
 
 const App = () => {
   const [test, setTest] = useState(false)
+
   return (
     <div className="h-screen flex flex-col overflow-hidden select-none relative z-0"> 
 

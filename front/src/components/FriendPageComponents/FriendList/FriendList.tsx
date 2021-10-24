@@ -8,7 +8,7 @@ import { CommContext, FriendInformation } from '../../../pages/IndexPage';
 const FriendList = (): JSX.Element => {
 	const location = useLocation()
 	const { friends }: { friends: Array<FriendInformation> } = useContext(CommContext);
-
+	console.log(friends)
 	return (
 		<div className="h-full w-auto flex-shrink-0 relative z-10 rounded-tl-xl bg-discord-gray flex flex-col">
 			<div className="h-14 w-full flex items-center shadow flex-shrink-0 p-2">

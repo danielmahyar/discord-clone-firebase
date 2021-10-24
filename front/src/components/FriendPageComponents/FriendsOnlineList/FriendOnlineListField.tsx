@@ -6,17 +6,17 @@ import { FriendInformation } from '../../../pages/IndexPage'
 
 
 const FriendOnlineListField = (props: FriendInformation) => {
-	const { uid } = props
+	const { uid, username, img_url, sub_text, status } = props
 
 	return (
 		<Link to={`/friends/${uid}`} className="w-full px-3 py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
 			<div className="flex items-center">
 				<div className="flex items-center mr-4">
-					<img src={img} className="rounded-full select-none pointer-events-none" alt="" width="50px" />
+					<img src={img_url} className="rounded-full select-none pointer-events-none" alt="" width="50px" />
 				</div>
 				<div className="flex flex-col justify-center">
-					<h2 className="text-white text-base font-bold select-none">Anden Etnisk Programmør</h2>
-					<p className="text-gray-300 text-sm font-semibold select-none">Dem der læser dette er døde i morgen</p>
+					<h2 className="text-white text-base font-bold select-none">{username}</h2>
+					<p className="text-gray-300 text-sm font-semibold select-none">{(sub_text) ? sub_text : `The user is ${status}` }</p>
 				</div>
 			</div>
 

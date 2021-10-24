@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router'
 import { FriendInformation } from '../../../pages/IndexPage'
 
 type ParamsType = {
-	id: string
+	uid: string
 }
 
 const FriendField = (props: FriendInformation) => {
@@ -14,7 +14,7 @@ const FriendField = (props: FriendInformation) => {
 	const params: ParamsType = useParams()
 
 	useEffect(() => {
-		if(props.uid === params.id) return setActive(true)
+		if(props.uid === params.uid) return setActive(true)
 		else return setActive(false)
 	}, [history, params, props.uid])
 
@@ -43,7 +43,7 @@ const FriendField = (props: FriendInformation) => {
 		>
 			<div className="flex items-center">
 				<img src={props.img_url} width="30px" className="mr-3 rounded-full" alt="" />
-				<h2 className="text-discord-text-primary font-bold text-sm truncate w-36">{props.name}</h2>
+				<h2 className="text-discord-text-primary font-bold text-sm truncate w-36">{props.username}</h2>
 			</div>
 			
 			{showClear && (

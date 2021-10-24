@@ -7,7 +7,6 @@ const FriendsOnlineList = ({ site }: any) => {
     const { friends }: { friends: Array<FriendInformation> } = useContext(CommContext)
     const filteredFriends = filterSiteReq(site, friends);
 
-
     return (
         <div className="p-6 pr-8 w-full h-full z-0 bg-discord-light flex flex-col scrollbar-thin scrollbar-thumb-rounded scrollbar-track-gray-600 scrollbar-thumb-gray-900 overflow-y-visible">
             <div className="px-3">

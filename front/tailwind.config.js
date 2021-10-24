@@ -16,6 +16,10 @@ module.exports = {
           DEFAULT: '#36393F',
         },
 
+        'discord-scrollbar-bg': {
+          DEFAULT: '#2E3338',
+        },
+
         'discord-user': {
           DEFAULT: '#292B2F',
         },
