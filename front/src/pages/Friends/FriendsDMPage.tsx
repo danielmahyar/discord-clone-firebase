@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { AiFillGift, AiFillPlusCircle, AiOutlineFileGif } from 'react-icons/ai'
-import TextareaAutosize from 'react-textarea-autosize';
+import React, { useContext, useState } from 'react'
 import { useParams } from 'react-router'
 import DMHeader from '../../components/FriendDMPageComponents/DMHeader'
-import Message from '../../components/FriendDMPageComponents/Message'
 import FriendList from '../../components/FriendPageComponents/FriendList/FriendList'
 import useEventListener from '../../hooks/useEventListener';
-import { useQuery, gql, useMutation, useSubscription } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import MessageList from '../../components/FriendDMPageComponents/MessageList';
+import InputField from '../../components/PageComponents/InputField';
+import { CommContext, FriendInformation } from '../IndexPage';
 
 const GET_MESSAGES = gql`
 	query getMessages($chatId: String!) {
 		getMessages(chatId: $chatId) {
 			uid,
+			userUid,
 			username,
 			img_url,
 			content
@@ -43,6 +43,7 @@ const MESSAGE_SUBSCRIPTION = gql`
 	subscription SubscripeToChat($chatId: String!){
 		messageAdded(chatId: $chatId){
 			uid,
+			userUid,
 			username,
 			img_url,
 			content
@@ -52,10 +53,10 @@ const MESSAGE_SUBSCRIPTION = gql`
 
 const FriendsDMPage = () => {
 	const params: { uid: string } = useParams()
+	const friendContext: any = useContext(CommContext)
+	const DMFriend: FriendInformation = (!friendContext.friends.loading) ? friendContext.friends.friendsArray.find((friend: FriendInformation) => params.uid === friend.uid) : { }
 	const [search, setSearch] = useState("")
-	const [loading2, setLoading] = useState(true)
 	const [messageInput, setMessageInput] = useState("")
-	const inputRef: any = useRef(null)
 	const {  subscribeToMore, ...result } = useQuery(GET_MESSAGES, { 
 		variables: { chatId: params.uid }
 	})
@@ -87,7 +88,7 @@ const FriendsDMPage = () => {
 				<DMHeader 
 					search={search} 
 					setSearch={setSearch}
-					username={params.uid}
+					username={DMFriend?.username || "Test"}
 				/>
 
 				{/* Container with main content */}
@@ -102,11 +103,10 @@ const FriendsDMPage = () => {
 								subscribeToMore({
 									document: MESSAGE_SUBSCRIPTION,
 									variables: {
-										chatId: "dwadawdaawda"
+										chatId: params.uid
 									},
 									updateQuery: (prev, { subscriptionData }) => {
 										if (!subscriptionData.data) return prev;
-										console.log({ prev, subscriptionData })
 										const newFeedItem = subscriptionData.data.messageAdded;
 										const newMessages = [...prev.getMessages, newFeedItem]
 										return { getMessages: newMessages }
@@ -116,7 +116,10 @@ const FriendsDMPage = () => {
 						/>
 
 						<div className="w-full px-4 z-0 h-auto pt-5 pb-6  bg-discord-light relative overflow-hidden flex flex-col">
-							<div className="flex w-full h-auto rounded-xl bg-discord-text-input items-center">
+							<InputField 
+								addMessage={addMessage}
+							/>
+							{/* <div className="flex w-full h-auto rounded-xl bg-discord-text-input items-center">
 								<div className="w-12 h-full relative group flex items-start justify-center py-3 mx-3">
 									<span className="absolute transform scale-0 transition-all -top-5 overflow-hidden h-auto py-1 px-2 rounded bg-discord-dark text-white whitespace-nowrap z-20 group-hover:scale-100">Add File</span>
 									<AiFillPlusCircle size={35} color="#B9BBBE" className="cursor-pointer" />
@@ -126,7 +129,10 @@ const FriendsDMPage = () => {
 									maxRows={5}
 									wrap="soft"
 									value={messageInput.replace(/(?:\r\n|\r|\n)/g, '')}
-									onChange={(e) => setMessageInput(e.target.value.replace(/(?:\r\n|\r|\n)/g, ''))}
+									onChange={(e) => {
+										setMessageInput(e.target.value.replace(/(?:\r\n|\r|\n)/g, ''))
+										setLoading(true)
+									}}
 									placeholder="Message @Anden Etnisk Programmør" 
 									className="w-full h-full overflow-y-scroll scrollbar-none z-40 text-white resize-none bg-transparent py-2 focus:outline-none" 
 								/>
@@ -134,10 +140,10 @@ const FriendsDMPage = () => {
 									<AiFillGift size={35} className="cursor-pointer" color="#B9BBBE"/>
 									<AiOutlineFileGif size={35} className="cursor-pointer" color="#B9BBBE"/>
 								</div>
-							</div>
-							{loading2 && (
+							</div> */}
+							{/* {loading2 && (
 								<p className="text-discord-text-highlight font-bold text-sm pt-1 animate-pulse origin-center"><strong>{params.uid}</strong> is typing...</p>
-							)}
+							)} */}
 						</div>
 					</div>
 

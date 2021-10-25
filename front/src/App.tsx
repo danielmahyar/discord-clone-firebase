@@ -5,7 +5,6 @@ import LoginPage from "./pages/LoginPage";
 import ServerStartPage from "./pages/Servers/ServerStartPage";
 import FriendsStartPage from "./pages/Friends/FriendsStartPage";
 import {  useState } from "react";
-import { gql } from "@apollo/client";
 
 //Routes for main application excluding login/signup
 export const routes = [
@@ -24,20 +23,26 @@ export const routes = [
     },
 ]
 
+
 const App = () => {
-  const [test, setTest] = useState(false)
+  const [user, setUser] = useState(false)
 
   return (
     <div className="h-screen flex flex-col overflow-hidden select-none relative z-0"> 
 
       <Switch>
-        {test ? (
+        {user ? (
           <Route path="/">
-            <IndexPage routes={routes}/>
+            <IndexPage 
+              routes={routes}
+              user={user}
+            />
           </Route>
         ) : (
           <Route path="/">
-            <LoginPage setTest={setTest}/>
+            <LoginPage 
+              setUser={setUser}
+            />
           </Route>
         )}
       </Switch>

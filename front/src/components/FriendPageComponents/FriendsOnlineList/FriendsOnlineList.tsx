@@ -1,11 +1,14 @@
-import { useContext } from 'react';
+import gql from 'graphql-tag';
+import { useContext, useEffect } from 'react';
 import { CommContext, FriendInformation } from '../../../pages/IndexPage';
 import FriendOnlineListField from './FriendOnlineListField';
 
-
 const FriendsOnlineList = ({ site }: any) => {
-    const { friends }: { friends: Array<FriendInformation> } = useContext(CommContext)
-    const filteredFriends = filterSiteReq(site, friends);
+    const { friends }: any = useContext(CommContext)
+    const friendsArray = friends.friendsArray
+    const filteredFriends = filterSiteReq(site, friendsArray);
+
+    useEffect(() => friends.subscribeToMore(), [friends.subscribeToMore])
 
     return (
         <div className="p-6 pr-8 w-full h-full z-0 bg-discord-light flex flex-col scrollbar-thin scrollbar-thumb-rounded scrollbar-track-gray-600 scrollbar-thumb-gray-900 overflow-y-visible">
@@ -18,7 +21,7 @@ const FriendsOnlineList = ({ site }: any) => {
                     <FriendOnlineListField key={index} {...friend} />
                 ))}
 
-                {filteredFriends.length === 0 && friends.length === 0 && (
+                {filteredFriends.length === 0 && friendsArray.length === 0 && (
                     <p>You have no friends</p>
                 )}
 

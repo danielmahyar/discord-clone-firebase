@@ -1,13 +1,14 @@
-import React from 'react'
-import { BsFillEmojiSmileFill, BsThreeDots } from 'react-icons/bs'
-import { FaReply } from 'react-icons/fa'
+import { BsFillEmojiSmileFill } from 'react-icons/bs'
 import Icons from '../PageComponents/Icons'
 
 type Props = {
-	img_url: string;
-	content: string;
-	username: string;
-	time: string;
+	message: {
+		img_url: string;
+		content: string;
+		username: string;
+		time: string;
+	}
+	showImg: boolean;
 }
 
 const iconValues = {
@@ -22,9 +23,11 @@ const iconValues = {
 	tooltipText: "Message"
 }
 
-const Message = ({ img_url, content, username, time }: Props) => {
+const Message = ({ message, showImg }: Props) => {
+	const { img_url, content, username, time } = message
+
 	return (
-		<div className="w-full flex z-0 mt-2 relative group items-center px-4 py-1 hover:bg-discord-gray">
+		<div className={`w-full flex z-0 relative group items-center px-4 py-1 hover:bg-discord-gray ${showImg ? 'mt-2' : ''}`}>
 			<div className="w-28 h-10 absolute flex items-center justify-between space-x-1 -top-2 right-5 transform scale-0 border rounded bg-discord-light border-discord-gray group-hover:scale-100">
 				<Icons 
 					{...iconValues}
@@ -40,16 +43,21 @@ const Message = ({ img_url, content, username, time }: Props) => {
 				<BsThreeDots {...iconConfig}/> */}
 			</div>
 			<div className="w-12 h-full ml-4 flex items-start justify-end">
-				<img 
-					src={img_url} 
-					className="rounded-full mr-5 object-cover"
-					width="50px"
-					alt="" 
-				/>
+				{showImg && (
+					<img 
+						src={img_url} 
+						className="rounded-full mr-5 object-cover"
+						width="50px"
+						alt="" 
+					/>
+				)}
+
 			</div>
 			<div className="flex flex-col w-full">
 				<div className="flex items-end">
-					<h2 className="text-white font-semibold text-lg mr-2 cursor-pointer">{username}</h2>
+					{showImg && (
+						<h2 className="text-white font-semibold text-lg mr-2 cursor-pointer">{username}</h2>
+					)}
 					<span className="text-discord-text-secondary text-sm select-none">{time}</span>										
 				</div>
 				<p className="text-discord-text-para ">{content}</p>

@@ -15,8 +15,8 @@ const ServerStartPage = () => {
 	const [loading, setLoading] = useState(false)
 	const [messageInput, setMessageInput] = useState("")
 	const inputRef: any = useRef(null)
-	const { friends }: { friends: Array<FriendInformation> } = useContext(CommContext);
-
+	const { friends }: any = useContext(CommContext);
+	const friendsArray = friends.friendsArray
 	useEventListener("keydown", (e: any) => {
 		if(e.key === "Enter" && messageInput.trim() !== "") {
 			console.log("test")
@@ -165,7 +165,7 @@ const ServerStartPage = () => {
 
 					<div className="h-full w-64 flex-shrink-0 bg-discord-gray py-4 overflow-y-auto">
 
-						{friends && friends.map((friend, index) => (
+						{friendsArray && friendsArray.map((friend: any, index: number) => (
 							<FriendListField 
 								key={index}
 								{...friend}

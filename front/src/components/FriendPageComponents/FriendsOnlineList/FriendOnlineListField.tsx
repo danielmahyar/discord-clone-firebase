@@ -1,5 +1,3 @@
-import React from 'react'
-import img from '../../../assets/template.jpg'
 import { BiMessage, BiDotsVerticalRounded } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { FriendInformation } from '../../../pages/IndexPage'
@@ -11,7 +9,17 @@ const FriendOnlineListField = (props: FriendInformation) => {
 	return (
 		<Link to={`/friends/${uid}`} className="w-full px-3 py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
 			<div className="flex items-center">
-				<div className="flex items-center mr-4">
+				<div className="flex items-center relative mr-4">
+					{(() => {
+						switch (status) {
+							case "online":
+								return <div className="absolute h-5 w-5 bg-green-500 rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+							case "offline":
+								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+							default:
+								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+						}
+					})()}
 					<img src={img_url} className="rounded-full select-none pointer-events-none" alt="" width="50px" />
 				</div>
 				<div className="flex flex-col justify-center">

@@ -24,6 +24,10 @@ module.exports = {
           DEFAULT: '#292B2F',
         },
 
+        'discord-user-offline': {
+          DEFAULT: '#747F8D'
+        },
+
         'discord-border': {
           DEFAULT: '#42454A',
         },

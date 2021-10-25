@@ -68,14 +68,23 @@ const GET_USER = gql`
 	}
 `
 
+const FRIENDS_STATUS_SUB = gql`
+    subscription FriendsStatusSubscription($friendUids: [String]){
+	friendsStatusChanged(friendUids: $friendUids){
+            uid,
+		  username,
+		  status
+        }
+    }
+`
 export const CommContext = React.createContext<any>({})
 
-const IndexPage = ({ routes }: any) => {
+const IndexPage = ({ routes, user }: any) => {
 	const location = useLocation()
 	const history = useHistory()
-	const FRIENDS_DATA = useQuery(GET_USER, { variables: { uid: "61734abf9f483ecbded895ac" }})
+	const { subscribeToMore, ...FRIENDS_DATA} = useQuery(GET_USER, { variables: { uid: user.uid }})
+	const friendsArray = ((!FRIENDS_DATA.loading) ? FRIENDS_DATA.data.getUser.friends : friends)
 
-	console.log({FRIENDS_DATA})
 	useEffect(() => {
 		if(location.pathname === "/") return history.replace(START_LOCATION)	
 	}, [location, history])
@@ -83,8 +92,36 @@ const IndexPage = ({ routes }: any) => {
 	return (
           <CommContext.Provider 
 			value={{ 
-				friends: ((!FRIENDS_DATA.loading) ? FRIENDS_DATA.data.getUser.friends : friends), 
-				serverlist 
+				friends: {
+					friendsArray,
+					friendsLoading: FRIENDS_DATA.loading,
+					subscribeToMore: () => 
+						subscribeToMore({
+							document: FRIENDS_STATUS_SUB,
+							variables: {
+								friendUids: friendsArray.map((friend: FriendInformation) => (friend.uid))
+							},
+							updateQuery: (prev, { subscriptionData }) => {
+								if (!subscriptionData.data) return prev;
+								const changedFriend: FriendInformation = subscriptionData.data.friendsStatusChanged
+								const filteredPrev: Array<FriendInformation> = prev.getUser.friends.map((friend: FriendInformation) => {
+									if(friend.uid === changedFriend.uid) {
+										return {
+											...friend,
+											status: changedFriend.status
+										}
+									} else {
+										return friend
+									}
+								})
+								console.log({ getUser: { ...prev.getUser, friends: filteredPrev } })
+								return { getUser: { ...prev.getUser, friends: filteredPrev } } 
+							}
+						})
+					
+				}, 
+				serverlist,
+				user
 			}}
 		>
 			<Top />

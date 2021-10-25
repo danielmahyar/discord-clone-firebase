@@ -1,18 +1,42 @@
-import React from 'react';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
-const LoginPage = ({ setTest }: any) => {
+const LOGIN = gql`
+  query LogUserIn($email: String!, $password: String!){
+    userLogin(email: $email, password: $password){
+      uid,
+      username,
+	 img_url,
+	 numberId
+    }
+  }
+`
+
+const LoginPage = ({ setUser }: any) => {
 	const history = useHistory()
+	const [formInput, setFormInput] = useState({ email: '', password: '' })
+	const [submitLogin, { loading, data, error }] = useLazyQuery(LOGIN, { variables: { 
+		email: formInput.email,
+		password: formInput.password, 
+	}})
+
+	useEffect(() => {
+		if(!loading && data){
+			setUser(data.userLogin)
+			history.replace(history.location.pathname)
+		}
+	}, [loading, data, error])
 
 	const handleLoginClick = () => {
-		setTest((prev: boolean) => !prev);
-		history.replace(history.location.pathname)
+		submitLogin()
 	}
 
 	const handleSubmitClick = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault()
-		setTest((prev: boolean) => !prev);
-		history.replace(history.location.pathname)
+		submitLogin()
+		// setUser((prev: boolean) => !prev);
 	}
 
 	return (
@@ -27,11 +51,21 @@ const LoginPage = ({ setTest }: any) => {
 					<div className="w-full h-full flex flex-col space-y-6 mb-6">
 						<div className="flex flex-col">
 							<span className="uppercase mb-2 font-bold text-discord-text-highlight text-xs">Email or username</span>
-							<input type="text" className="bg-discord-gray px-2 p-3 text-white transition-all duration-500 font-semibold rounded border border-discord-dark outline-none focus:border-blue-500" />							
+							<input 
+								value={formInput.email}
+								onChange={(e) => setFormInput({ ...formInput, email: e.target.value })}
+								type="text" 
+								className="bg-discord-gray px-2 p-3 text-white transition-all duration-500 font-semibold rounded border border-discord-dark outline-none focus:border-blue-500" 
+							/>							
 						</div>
 						<div className="flex flex-col">
 							<span className="uppercase mb-2 font-bold text-discord-text-highlight text-xs">Password</span>
-							<input type="password" className="bg-discord-gray px-2 p-3 text-white transition-all duration-500 font-semibold rounded border border-discord-dark mb-1 outline-none focus:border-blue-500" />
+							<input 
+								value={formInput.password}
+								onChange={(e) => setFormInput({ ...formInput, password: e.target.value })}
+								type="password" 
+								className="bg-discord-gray px-2 p-3 text-white transition-all duration-500 font-semibold rounded border border-discord-dark mb-1 outline-none focus:border-blue-500" 
+							/>
 							<p className="text-sm text-discord-blue font-semibold">Forgot your password?</p>
 						</div>
 					</div>
