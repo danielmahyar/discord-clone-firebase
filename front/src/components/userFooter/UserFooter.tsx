@@ -4,13 +4,14 @@ import { BsHeadphones } from 'react-icons/bs'
 import { TiMicrophone } from 'react-icons/ti'
 import { BiMicrophoneOff } from 'react-icons/bi'
 import { CommContext } from '../../pages/IndexPage';
+import { useHistory } from 'react-router';
 
 interface Props {
 }
 
 const UserFooter = (props: Props) => {
 	const [isMicrophoneOn, setMicrophoneOn] = useState(false)
-    const { user } = useContext(CommContext)
+    const { user, setUser, changeStatus } = useContext(CommContext)
 
 	const handleMicrophoneClick = (): void => {
 		setMicrophoneOn(prev => !prev)
@@ -37,7 +38,19 @@ const UserFooter = (props: Props) => {
                 )}
 
                 <BsHeadphones size={38} color="#B9BBBE" className="cursor-pointer rounded py-2 hover:bg-discord-hover" />
-                <IoSettingsSharp size={38} color="#B9BBBE" className="cursor-pointer rounded py-2 hover:bg-discord-hover" />
+                <IoSettingsSharp
+                    onClick={() => {
+                        changeStatus({ variables: {
+                            userUid: localStorage.getItem('userUid'),
+                            status: 'offline'
+                        }})
+                        localStorage.removeItem('userUid')
+                        setUser(null)
+                    }}
+                    size={38} 
+                    color="#B9BBBE" 
+                    className="cursor-pointer rounded py-2 hover:bg-discord-hover" 
+                />
             </div>
         </div>
     )

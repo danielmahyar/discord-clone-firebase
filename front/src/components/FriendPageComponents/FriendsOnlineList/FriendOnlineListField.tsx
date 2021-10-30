@@ -7,17 +7,17 @@ const FriendOnlineListField = (props: FriendInformation) => {
 	const { uid, username, img_url, sub_text, status } = props
 
 	return (
-		<Link to={`/friends/${uid}`} className="w-full px-3 py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
+		<Link to={`/friends/${uid}`} className="w-full px-3 transition-all ease-in py-4 border-t border-discord-border flex items-center justify-between cursor-pointer hover:bg-discord-hover">
 			<div className="flex items-center">
 				<div className="flex items-center relative mr-4">
 					{(() => {
 						switch (status) {
 							case "online":
-								return <div className="absolute h-5 w-5 bg-green-500 rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+								return <div className="absolute h-5 w-5 bg-green-600 rounded-full border-4 border-discord-light -bottom-2 right-0"></div>
 							case "offline":
-								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-light -bottom-2 right-0"></div>
 							default:
-								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-dark -bottom-2 right-0"></div>
+								return <div className="absolute h-5 w-5 bg-discord-user-offline rounded-full border-4 border-discord-light -bottom-2 right-0"></div>
 						}
 					})()}
 					<img src={img_url} className="rounded-full select-none pointer-events-none" alt="" width="50px" />

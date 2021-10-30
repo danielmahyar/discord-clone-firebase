@@ -30,7 +30,7 @@ const DMHeader = ({ search, setSearch, username }: any) => {
 	return (
 		<div className="h-14 flex-shrink-0 z-10 relative w-full grid grid-cols-3 shadow bg-discord-light px-4 overflow-x-hidden">
 			<div className="col-span-2 flex items-center h-full w-full min-w-min">
-				<span className="text-discord-text-secondary text-2xl mr-4 font-bold">@</span>
+				<span className="text-discord-text-secondary text-2xl mr-3 font-bold">@</span>
 				<h1 className="font-bold text-white text-xl mr-2 truncate">{username}</h1>
 				<div className="h-6 border-r border-discord-border mr-2"></div>
 				<span className="bg-discord-dark text-discord-text-primary text-sm rounded-2xl px-2 mr-2">AKA</span>

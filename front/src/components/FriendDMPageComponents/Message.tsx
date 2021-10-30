@@ -25,10 +25,9 @@ const iconValues = {
 
 const Message = ({ message, showImg }: Props) => {
 	const { img_url, content, username, time } = message
-
 	return (
-		<div className={`w-full flex z-0 relative group items-center px-4 py-1 hover:bg-discord-gray ${showImg ? 'mt-2' : ''}`}>
-			<div className="w-28 h-10 absolute flex items-center justify-between space-x-1 -top-2 right-5 transform scale-0 border rounded bg-discord-light border-discord-gray group-hover:scale-100">
+		<div className={`w-full flex z-0 relative group items-center px-4 py-1 select-text hover:bg-discord-gray ${showImg ? 'mt-2' : ''}`}>
+			{/* <div className="w-28 h-10 absolute flex items-center justify-between space-x-1 -top-2 right-5 transform scale-0 border rounded bg-discord-light border-discord-gray group-hover:scale-100">
 				<Icons 
 					{...iconValues}
 				/>
@@ -37,16 +36,16 @@ const Message = ({ message, showImg }: Props) => {
 				/>
 				<Icons 
 					{...iconValues}
-				/>
+				/> */}
 				{/* <BsFillEmojiSmileFill {...iconConfig}/>
 				<FaReply {...iconConfig}/>
 				<BsThreeDots {...iconConfig}/> */}
-			</div>
-			<div className="w-12 h-full ml-4 flex items-start justify-end">
+			{/* </div> */}
+			<div className="w-12 flex-shrink-0 h-full ml-4 flex items-start justify-end">
 				{showImg && (
 					<img 
 						src={img_url} 
-						className="rounded-full mr-5 object-cover"
+						className="rounded-full mr-5 object-cover cursor-pointer"
 						width="50px"
 						alt="" 
 					/>

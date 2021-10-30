@@ -79,7 +79,7 @@ module.exports = {
   variants: {
     extend: {
       scrollbar: ['rounded'],
-      borderRadius: ['group-hover'],
+      borderRadius: ['group-hover', 'hover'],
       height: ['group-hover'],
       top: ['group-hover'],
       scale: ['group-hover'],

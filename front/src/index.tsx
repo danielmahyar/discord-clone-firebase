@@ -15,9 +15,9 @@ const GRAPHQL_WS_LINK = (PRODUCTION) ? "wss://discord-clone-1.herokuapp.com/grap
 const wsLink = new WebSocketLink({
   uri: GRAPHQL_WS_LINK,
   options: {
-    reconnect: true
+    reconnect: true,
   }
-});
+})
 
 const client = new ApolloClient({
   uri: GRAPHQL_LINK,

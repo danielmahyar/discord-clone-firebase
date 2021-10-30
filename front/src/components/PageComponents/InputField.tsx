@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AiFillGift, AiFillPlusCircle, AiOutlineFileGif } from 'react-icons/ai'
 import TextareaAutosize from 'react-textarea-autosize';
 import useEventListener from '../../hooks/useEventListener';
@@ -44,7 +44,7 @@ const InputField = ({ addMessage }: any) => {
 			<div className="flex items-start mr-5 space-x-3 h-full py-3">
 				<AiFillGift size={35} className="cursor-pointer" color="#B9BBBE"/>
 				<AiOutlineFileGif size={35} className="cursor-pointer" color="#B9BBBE"/>
-		</div>
+			</div>
 		</div>
 	)
 }

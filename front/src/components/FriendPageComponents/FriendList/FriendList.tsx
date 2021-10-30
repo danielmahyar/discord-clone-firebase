@@ -1,6 +1,6 @@
 import FriendListField from './FriendListField'
 import { FaUserFriends, FaAccessibleIcon, FaPlus } from "react-icons/fa";
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import UserFooter from '../../userFooter/UserFooter';
 import { Link, useLocation } from 'react-router-dom';
 import { CommContext, FriendInformation } from '../../../pages/IndexPage';
@@ -9,6 +9,9 @@ const FriendList = (): JSX.Element => {
 	const location = useLocation()
 	const { friends }: any = useContext(CommContext);
 	const friendsArray: FriendInformation[] = friends.friendsArray
+
+	useEffect(() => friends.subscribeToMore(), [friends])
+
 	return (
 		<div className="h-full w-auto flex-shrink-0 relative z-10 rounded-tl-xl bg-discord-gray flex flex-col">
 			<div className="h-14 w-full flex items-center shadow flex-shrink-0 p-2">

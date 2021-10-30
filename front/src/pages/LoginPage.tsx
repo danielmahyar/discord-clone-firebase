@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -9,7 +9,10 @@ const LOGIN = gql`
       uid,
       username,
 	 img_url,
-	 numberId
+	 numberId,
+	 friends {
+		 uid
+	 }
     }
   }
 `
@@ -22,12 +25,16 @@ const LoginPage = ({ setUser }: any) => {
 		password: formInput.password, 
 	}})
 
+
 	useEffect(() => {
 		if(!loading && data){
 			setUser(data.userLogin)
-			history.replace(history.location.pathname)
+
+			localStorage.setItem('userUid', data.userLogin.uid.toString())
+
+			history.replace("/friends")
 		}
-	}, [loading, data, error])
+	}, [loading, data, error, setUser, history])
 
 	const handleLoginClick = () => {
 		submitLogin()
@@ -36,7 +43,6 @@ const LoginPage = ({ setUser }: any) => {
 	const handleSubmitClick = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault()
 		submitLogin()
-		// setUser((prev: boolean) => !prev);
 	}
 
 	return (

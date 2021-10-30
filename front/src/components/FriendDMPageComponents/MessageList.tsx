@@ -1,4 +1,4 @@
-import React, { LegacyRef, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Message from './Message';
 
 const MessageList = ({ subscripeToMoreMessages, ...result }: any) => {

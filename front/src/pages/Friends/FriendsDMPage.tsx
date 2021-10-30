@@ -7,6 +7,7 @@ import { useQuery, gql, useMutation } from '@apollo/client';
 import MessageList from '../../components/FriendDMPageComponents/MessageList';
 import InputField from '../../components/PageComponents/InputField';
 import { CommContext, FriendInformation } from '../IndexPage';
+console.log("EEE")
 
 const GET_MESSAGES = gql`
 	query getMessages($chatId: String!) {
