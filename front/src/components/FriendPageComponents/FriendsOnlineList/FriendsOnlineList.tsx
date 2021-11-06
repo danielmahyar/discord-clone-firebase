@@ -3,11 +3,8 @@ import { CommContext, FriendInformation } from '../../../pages/IndexPage';
 import FriendOnlineListField from './FriendOnlineListField';
 
 const FriendsOnlineList = ({ site }: any) => {
-    const { friends }: any = useContext(CommContext)
-    const friendsArray = friends.friendsArray
+    const { friendsArray }: any = useContext(CommContext)
     const filteredFriends = filterSiteReq(site, friendsArray);
-
-    useEffect(() => friends.subscribeToMore(), [friends])
 
     return (
         <div className="p-6 pr-8 w-full h-full z-0 bg-discord-light flex flex-col scrollbar-thin scrollbar-thumb-rounded scrollbar-track-gray-600 scrollbar-thumb-gray-900 overflow-y-visible">

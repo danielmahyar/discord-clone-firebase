@@ -1,14 +1,8 @@
 import { useEffect, useRef } from 'react'
 import Message from './Message';
 
-const MessageList = ({ subscripeToMoreMessages, ...result }: any) => {
-	const { data, loading } = result;
-	const messages = (!loading) ? data.getMessages : [];
+const MessageList = ({ messages }: any) => {
 	const scrollRef = useRef<any>(null)
-
-	useEffect(() => {
-		return subscripeToMoreMessages()
-	}, [subscripeToMoreMessages])
 
 	return (
 		<div className="h-full z-0 flex flex-col bg-discord-light scrollbar-thin scrollbar-track-discord-gray scrollbar-thumb-discord-dark overflow-y-scroll overflow-x-hidden select-text">

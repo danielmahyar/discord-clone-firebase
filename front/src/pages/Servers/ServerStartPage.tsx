@@ -15,8 +15,7 @@ const ServerStartPage = () => {
 	// const [loading, setLoading] = useState(false)
 	const [messageInput, setMessageInput] = useState("")
 	const inputRef: any = useRef(null)
-	const { friends }: any = useContext(CommContext);
-	const friendsArray = friends.friendsArray
+	const { friendsArray }: any = useContext(CommContext);
 
 	const messages: any = [
 		{
@@ -122,13 +121,13 @@ const ServerStartPage = () => {
 					{/* Large content */}
 					<div className="w-full h-full bg-discord-light flex flex-col">
 						<div className="w-full h-full flex flex-col-reverse scrollbar-thin scrollbar-thumb-rounded scrollbar-track-discord-scrollbar-bg scrollbar-thumb-discord-dark overflow-y-scroll mr-1 overflow-x-hidden">
-							{messages.length > 0 && messages.map((message: any, index: number) => (
+							{/* {messages.length > 0 && messages.map((message: any, index: number) => (
 								<Message 
 									key={index}
 									message={message}
 									showImg={true}
 								/>
-							))}
+							))} */}
 						</div>
 
 						<div className="w-full px-4 z-0 h-auto pt-5 pb-6  bg-discord-light relative overflow-hidden flex flex-col">

@@ -3,79 +3,30 @@ import { useParams } from 'react-router'
 import DMHeader from '../../components/FriendDMPageComponents/DMHeader'
 import FriendList from '../../components/FriendPageComponents/FriendList/FriendList'
 import useEventListener from '../../hooks/useEventListener';
-import { useQuery, gql, useMutation } from '@apollo/client';
 import MessageList from '../../components/FriendDMPageComponents/MessageList';
 import InputField from '../../components/PageComponents/InputField';
 import { CommContext, FriendInformation } from '../IndexPage';
-console.log("EEE")
-
-const GET_MESSAGES = gql`
-	query getMessages($chatId: String!) {
-		getMessages(chatId: $chatId) {
-			uid,
-			userUid,
-			username,
-			img_url,
-			content
-		}
-	}
-
-`
-
-const ADD_MESSAGE = gql`
-	mutation SubmitMessage(
-		$userUid: String!
-		$content: String!
-		$username: String!
-		$img_url: String!
-	) {
-		messageAdd(
-			userUid: $userUid
-			content: $content
-			username: $username
-			img_url: $img_url
-		) {
-			content
-		}
-	}
-`
-
-const MESSAGE_SUBSCRIPTION = gql`
-	subscription SubscripeToChat($chatId: String!){
-		messageAdded(chatId: $chatId){
-			uid,
-			userUid,
-			username,
-			img_url,
-			content
-		}
-	}
-`
+import { sendMessage } from '../../database/firebase-queries';
+import { useDirectMessages } from '../../hooks/useDirectMessages';
 
 const FriendsDMPage = () => {
 	const params: { uid: string } = useParams()
 	const friendContext: any = useContext(CommContext)
-	const DMFriend: FriendInformation = (!friendContext.friends.loading) ? friendContext.friends.friendsArray.find((friend: FriendInformation) => params.uid === friend.uid) : { }
+	const DMFriend: FriendInformation = friendContext.friendsArray.find((friend: FriendInformation) => params.uid === friend.uid)
+	const [messages, chatRoomId] = useDirectMessages(friendContext?.user?.uid || '', params.uid)
 	const [search, setSearch] = useState("")
 	const [messageInput, setMessageInput] = useState("")
-	const {  subscribeToMore, ...result } = useQuery(GET_MESSAGES, { 
-		variables: { chatId: params.uid }
-	})
-	const [addMessage] = useMutation(ADD_MESSAGE);
-
+	
+	const ref = `direct_messages/${chatRoomId}/messages`
 	useEventListener("keydown", (e: any) => {
 		if(e.key === "Enter" && messageInput.trim() !== "") {
-		
-			addMessage({ variables: {
-				userUid: "61734abf9f483ecbded895ac",
-				username: "Anden Etnisk Programmør",
-				content: messageInput,
-				img_url: "https://cdn.discordapp.com/avatars/345248360577368064/e16bd50df43ab3b948f6b8fcbb231eef.webp?size=96",
-			}})
-			
 			setMessageInput("")
 		}
 	})
+
+	const addMessage = (messageData: any) => {
+		sendMessage(ref, messageData)
+	}
 
 	return (
 		<main className="h-full w-full flex">
@@ -98,22 +49,8 @@ const FriendsDMPage = () => {
 					{/* Large content */}
 					<div className="w-full z-0 h-full bg-discord-light flex flex-col ">
 
-						<MessageList 
-							{...result}
-							subscripeToMoreMessages={() => 
-								subscribeToMore({
-									document: MESSAGE_SUBSCRIPTION,
-									variables: {
-										chatId: params.uid
-									},
-									updateQuery: (prev, { subscriptionData }) => {
-										if (!subscriptionData.data) return prev;
-										const newFeedItem = subscriptionData.data.messageAdded;
-										const newMessages = [...prev.getMessages, newFeedItem]
-										return { getMessages: newMessages }
-									}
-								})
-							}
+						<MessageList
+							messages={messages}
 						/>
 
 						<div className="w-full px-4 z-0 h-auto pt-5 pb-6  bg-discord-light relative overflow-hidden flex flex-col">

@@ -12,12 +12,14 @@ const InputField = ({ addMessage }: any) => {
 	useEventListener("keydown", (e: any) => {
 		if(e.key === "Enter" && messageInput.trim() !== "") {
 		
-			addMessage({ variables: {
+			addMessage({
 				userUid: user.uid,
 				username: user.username,
 				content: messageInput,
 				img_url: user.img_url,
-			}})
+			})
+
+			console.log(user)
 			
 			setMessageInput("")
 		}

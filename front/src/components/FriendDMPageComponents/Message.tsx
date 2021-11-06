@@ -6,7 +6,7 @@ type Props = {
 		img_url: string;
 		content: string;
 		username: string;
-		time: string;
+		time: any;
 	}
 	showImg: boolean;
 }
@@ -25,6 +25,7 @@ const iconValues = {
 
 const Message = ({ message, showImg }: Props) => {
 	const { img_url, content, username, time } = message
+	const mappedTime = time.toDate()
 	return (
 		<div className={`w-full flex z-0 relative group items-center px-4 py-1 select-text hover:bg-discord-gray ${showImg ? 'mt-2' : ''}`}>
 			{/* <div className="w-28 h-10 absolute flex items-center justify-between space-x-1 -top-2 right-5 transform scale-0 border rounded bg-discord-light border-discord-gray group-hover:scale-100">
@@ -57,7 +58,7 @@ const Message = ({ message, showImg }: Props) => {
 					{showImg && (
 						<h2 className="text-white font-semibold text-lg mr-2 cursor-pointer">{username}</h2>
 					)}
-					<span className="text-discord-text-secondary text-sm select-none">{time}</span>										
+					<span className="text-discord-text-secondary text-sm select-none">{(showImg) && `${mappedTime.getHours()}:${mappedTime.getMinutes()}:${mappedTime.getSeconds()}`}</span>										
 				</div>
 				<p className="text-discord-text-para ">{content}</p>
 			</div>

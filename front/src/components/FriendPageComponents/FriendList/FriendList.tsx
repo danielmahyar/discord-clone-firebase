@@ -7,10 +7,7 @@ import { CommContext, FriendInformation } from '../../../pages/IndexPage';
 
 const FriendList = (): JSX.Element => {
 	const location = useLocation()
-	const { friends }: any = useContext(CommContext);
-	const friendsArray: FriendInformation[] = friends.friendsArray
-
-	useEffect(() => friends.subscribeToMore(), [friends])
+	const { friendsArray }: any = useContext(CommContext);
 
 	return (
 		<div className="h-full w-auto flex-shrink-0 relative z-10 rounded-tl-xl bg-discord-gray flex flex-col">
@@ -45,7 +42,7 @@ const FriendList = (): JSX.Element => {
 				</div>
 				{/* List with friend fields */}
 				<div className="space-y-1">
-					{friendsArray.length > 0 && friendsArray.map((friendInfo, index) => (
+					{friendsArray.length > 0 && friendsArray.map((friendInfo: any, index: any) => (
 						<FriendListField key={friendInfo.uid} {...friendInfo} />
 					))}
 				</div>

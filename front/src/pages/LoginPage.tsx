@@ -1,52 +1,38 @@
-import { useLazyQuery } from '@apollo/client';
-import gql from 'graphql-tag';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { auth } from '../database/firebase-connect';
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-const LOGIN = gql`
-  query LogUserIn($email: String!, $password: String!){
-    userLogin(email: $email, password: $password){
-      uid,
-      username,
-	 img_url,
-	 numberId,
-	 friends {
-		 uid
-	 }
-    }
-  }
-`
 
-const LoginPage = ({ setUser }: any) => {
+const LoginPage = () => {
 	const history = useHistory()
 	const [formInput, setFormInput] = useState({ email: '', password: '' })
-	const [submitLogin, { loading, data, error }] = useLazyQuery(LOGIN, { variables: { 
-		email: formInput.email,
-		password: formInput.password, 
-	}})
-
+	const [submitted, setSubmitted] = useState(false)
+	const [error, setError] = useState({ state: false, message: "" })
+	const [loading, setLoading] = useState(false) 
 
 	useEffect(() => {
-		if(!loading && data){
-			setUser(data.userLogin)
+		if(!submitted) return
+		setLoading(true)
 
-			localStorage.setItem('userUid', data.userLogin.uid.toString())
+		signInWithEmailAndPassword(auth, formInput.email, formInput.password)
+		.catch((err) => {
+			setLoading(false)
+			setError({ state: true, message: error.message })
+		})
+		
 
-			history.replace("/friends")
-		}
-	}, [loading, data, error, setUser, history])
 
-	const handleLoginClick = () => {
-		submitLogin()
-	}
+	})
 
-	const handleSubmitClick = (e: React.FormEvent<HTMLFormElement>): void => {
+	const handleSubmitClick = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		submitLogin()
+		setSubmitted(true)
 	}
+
 
 	return (
-		<div className="h-full w-full flex items-center justify-center bg-discord-purple">
+		<div className="h-full w-full flex flex-col items-center justify-center bg-discord-purple">
 			<div style={{ width: '850px', height: 'auto' }} className="p-8 grid grid-cols-3 gap-5 rounded-lg bg-discord-light">
 				<form
 					onSubmit={handleSubmitClick}
@@ -76,7 +62,7 @@ const LoginPage = ({ setUser }: any) => {
 						</div>
 					</div>
 					<button
-						onClick={handleLoginClick}
+						type="submit"
 						className="bg-discord-purple transition-all text-white font-bold px-2 py-3 rounded mb-2 hover:opacity-80"
 					>
 						Login
@@ -89,7 +75,18 @@ const LoginPage = ({ setUser }: any) => {
 					<p className="text-center text-discord-text-highlight">Scan this with <span className="font-bold">Discord Mobile <br /> app</span> to log in instantly.</p>
 				</div>
 			</div>
-			
+			{error && (
+				<div style={{ width: '850px', height: 'auto' }}>
+					<p>{ error.message }</p>
+				</div>
+			)}
+
+			{loading && (
+				<div style={{ width: '850px', height: 'auto' }}>
+					<p>Loading...</p>
+				</div>
+			)}
+
 		</div>
 	)
 }

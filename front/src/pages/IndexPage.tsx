@@ -1,10 +1,12 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { gql } from 'graphql-tag'
 import React, { useEffect } from 'react'
 import {  Route, Switch, useHistory, useLocation } from 'react-router'
 import ServerList from '../components/serverlist/ServerList'
 import Top from '../components/Top'
+import { changeStatus } from '../database/firebase-queries'
+import { useDirectMessages } from '../hooks/useDirectMessages'
 import useEventListener from '../hooks/useEventListener'
+import useUserFriends from '../hooks/useUserFriends'
+import { useUserInformation } from '../hooks/useUserInformation'
 import LoadingPage from './LoadingPage'
 
 const START_LOCATION = "/friends"
@@ -54,66 +56,22 @@ const friends: Array<FriendInformation> = [
 ]
 
 
-const FRIENDS_STATUS_SUB = gql`
-    subscription FriendsStatusSubscription($friendUids: [String]){
-		friendsStatusChanged(friendUids: $friendUids){
-            uid,
-		  username,
-		  status
-        	}
-    }
-`
-
-const SET_USER_STATUS = gql`
-	mutation SetUserStats(
-		$userUid: String!
-		$status: String!
-	){
-		changeStatus(userUid: $userUid, status: $status) {
-			uid,
-			status
-		}
-	}
-`
-
-const GET_FRIENDS = gql`
-	query GetUserFriends($friendUids: [String]) {
-		getUserFriends(friendUids: $friendUids) {
-			uid,
-			username,
-			status,
-			sub_text,
-			img_url
-		}
-	}
-`
-
 export const CommContext = React.createContext<any>({})
 
-const IndexPage = ({ routes, user, setUser }: any) => {
+const IndexPage = ({ routes, fireUser  }: any) => {
 	const location = useLocation()
 	const history = useHistory()
-	const [changeStatus] = useMutation(SET_USER_STATUS)
-	const { subscribeToMore, ...FRIENDS_DATA } = useQuery(GET_FRIENDS, { variables: { friendUids: user.friends.map((friend: any) => friend.uid) }})
-	console.log(FRIENDS_DATA)
-	const friendsArray = ((!FRIENDS_DATA.loading) ? FRIENDS_DATA.data?.getUserFriends : friends)
+	const [user] = useUserInformation(fireUser.uid)
+	const [friendsArray, loading] = useUserFriends(fireUser.uid)
 
-	
-	useEffect(() => {
-		changeStatus({ variables: { 
-			userUid: user.uid,
-			status: 'online'
-		}}).then(() => {
-			//do something with new status
-		})
-	}, [changeStatus, user])
-
-	useEventListener('unload', (e: any) => {
-		changeStatus({ variables: { 
-			userUid: user.uid,
-			status: 'offline'
-		}})
+	useEventListener('beforeunload', (e: any) => {
+		e.preventDefault()
+		changeStatus(fireUser.uid, "offline")
 	})
+
+	useEffect(() => {
+		changeStatus(fireUser.uid, "online")
+	}, [])
 
 	useEffect(() => {
 		if(location.pathname === "/") return history.replace(START_LOCATION)	
@@ -122,39 +80,9 @@ const IndexPage = ({ routes, user, setUser }: any) => {
 	return (
           <CommContext.Provider 
 			value={{ 
-				friends: {
-					friendsArray,
-					friendsLoading: FRIENDS_DATA.loading,
-					subscribeToMore: () =>
-						subscribeToMore({
-							document: FRIENDS_STATUS_SUB,
-							variables: {
-								friendUids: friendsArray.map((friend: FriendInformation) => (friend.uid))
-							},
-							updateQuery: (prev, { subscriptionData }) => {
-								console.log({ prev, subscriptionData })
-								if (!subscriptionData.data) return prev;
-								const changedFriend: FriendInformation = subscriptionData.data.friendsStatusChanged
-								const filteredPrev: Array<FriendInformation> = prev.getUserFriends.map((friend: FriendInformation) => {
-									if(friend.uid === changedFriend.uid) {
-										return {
-											...friend,
-											status: changedFriend.status
-										}
-									} else {
-										return friend
-									}
-								})
-								console.log({ getUserFriends: filteredPrev } )
-								return { getUserFriends: filteredPrev } 
-							}
-						})
-					
-				}, 
+				friendsArray,
 				serverlist,
 				user,
-				setUser,
-				changeStatus
 			}}
 		>
 			<Top />
@@ -174,6 +102,12 @@ const IndexPage = ({ routes, user, setUser }: any) => {
           </CommContext.Provider>
 	)
 }
+
+export default IndexPage
+
+
+
+
 
 		// <main className="h-full w-full flex">
 
@@ -220,4 +154,3 @@ const IndexPage = ({ routes, user, setUser }: any) => {
 		// 	</div>
 
 		// </main>
-export default IndexPage
